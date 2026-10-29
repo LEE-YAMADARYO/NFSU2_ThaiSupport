@@ -1,6 +1,9 @@
 // U2_ThaiSupport - Thai language support for the international NFS: Underground 2
 // speed2.exe (v1.2 US). Pure data patching, no code hooks.
 //
+// Copyright (C) 2025 U2_ThaiSupport contributors
+// This program is licensed under the GNU GPL-3.0; see the LICENSE file.
+//
 // Background: the international exe already maps the registry value "Thai" to
 // language id 11, but its LanguageInfoTable (0x7F7020) only holds entries with
 // ids 0-10, so selecting Thai makes the resource loader fail on a null entry.
@@ -58,16 +61,18 @@ namespace {
         const DWORD* fontInfo;
     };
 
-    // Thai font set, mirrors the stock KOREAN/CHINESE layout: three null-
-    // terminated arrays of bStringHash'd texture names that the game resolves
-    // inside LANGUAGES\THAILAND.BIN via eLoadStreamingTexture.
-    // Hashes verified against Thailand.bin of the Thai release:
+    // Thai font set: three null-terminated arrays of bStringHash'd texture
+    // names that the game resolves inside LANGUAGES\THAILAND.BIN via
+    // eLoadStreamingTexture (pack 2 is loaded when racing starts, pack 3 when
+    // the frontend loads). Hashes verified against Thailand.bin:
     //   0x4815619D CONDUITMDITC_TT21I_THAILAND, 0xA73823FF CONDUITMDITC_TT14I_THAILAND,
     //   0xA87927BE FONT_ARIAL, 0xBBBA71C2 shared small texture,
+    //   0x9583AA1A FONT_CONDUITMDITCTT38BI (racing HUD numerals, shipped in
+    //   Thailand.bin and preloaded by the JAPANESE set as well),
     //   0xAB6215C1 FONT_ARIAL12, 0x0920075C FONT_IMPACT36.
     DWORD g_ThaiFontInfo[28] = {
         0x4815619D, 0xA87927BE, 0xA73823FF, 0xBBBA71C2, 0, 0, 0, 0, // primary pack
-        0, 0, 0, 0, 0, 0, 0, 0,                                     // secondary pack (unused, like KOREAN)
+        0x9583AA1A, 0, 0, 0, 0, 0, 0, 0,                            // racing HUD pack (like JAPANESE)
         0xAB6215C1, 0x0920075C, 0, 0, 0, 0, 0, 0,                   // shared pack
         0, 0, 0, 0,                                                 // loaded flags, game-managed
     };
